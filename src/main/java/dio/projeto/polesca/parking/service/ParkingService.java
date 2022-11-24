@@ -1,5 +1,6 @@
 package dio.projeto.polesca.parking.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import dio.projeto.polesca.parking.helpers.UUIDHelper;
 import dio.projeto.polesca.parking.mockData.ParkingMock;
 import dio.projeto.polesca.parking.models.Parking;
 
@@ -25,5 +27,19 @@ public class ParkingService {
             .stream()
             .collect(Collectors.toList());
     }
+
+    public Parking findById(String id) {
+        return parkingMap.get(id);
+    }
+
+    public void create(Parking item) {
+        if (item.getId() == null) {
+            item.setId(UUIDHelper.getUUID());
+        }
+        
+        item.setEntryDate(LocalDateTime.now());
+        parkingMap.put(item.getId(), item);
+    }
+
     
 }
