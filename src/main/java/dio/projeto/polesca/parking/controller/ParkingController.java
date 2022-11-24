@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,10 +48,6 @@ public class ParkingController {
     @GetMapping("/{id}")
     ResponseEntity<ParkingDTO> findById(@PathVariable String id) {
         var value =  parkingService.findById(id);
-        if (value == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(mapper.toParkingDTO(value));
     }
     
@@ -68,4 +66,21 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toParkingDTO(item));
     }
 
+    @PutMapping("{id}")
+    ResponseEntity<ParkingDTO> put(@PathVariable String id, @RequestBody ParkingCreateDTO dto) {
+        if (dto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        var entity = mapper.toParkingFromCreateDTO(dto);
+        parkingService.update(id, entity);
+        return ResponseEntity.ok(mapper.toParkingDTO(entity));
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity delete(@PathVariable String id) {
+         parkingService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    
 }
