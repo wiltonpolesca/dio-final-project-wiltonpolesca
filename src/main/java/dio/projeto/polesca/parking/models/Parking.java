@@ -17,4 +17,6 @@ public class Parking {
     @NonNull private LocalDateTime entryDate;
     private LocalDateTime exitDate;
     private Double bill;
+    
+    public Parking() {}
 }
