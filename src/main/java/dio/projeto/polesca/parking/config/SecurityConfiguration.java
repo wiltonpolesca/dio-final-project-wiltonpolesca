@@ -16,11 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private static final String[] SWAGGER_WHITLIST = {
+    private static final String[] SWAGGER_ALLOWLIST = {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/webjars/**",
-            "/v2/api-docs"
+            "/v2/api-docs",
+            "/csrf"
     };
 
     @Bean
@@ -51,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(SWAGGER_WHITLIST).permitAll()
+                .antMatchers(SWAGGER_ALLOWLIST).permitAll()
                 .antMatchers(HttpMethod.POST, "/parking/**").hasAnyRole("ADMIN", "USERS", "TESTER")
                 .antMatchers(HttpMethod.PUT, "/parking/**").hasAnyRole("ADMIN", "USERS", "TESTER")
                 .antMatchers(HttpMethod.GET, "/parking/**").hasAnyRole("ADMIN", "USERS", "TESTER")
