@@ -1,8 +1,6 @@
 package dio.projeto.polesca.parking.controller;
 
-import java.security.Provider.Service;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +18,7 @@ import dio.projeto.polesca.parking.controller.dto.ParkingCreateDTO;
 import dio.projeto.polesca.parking.controller.dto.ParkingDTO;
 import dio.projeto.polesca.parking.controller.mapper.ParkingMapper;
 import dio.projeto.polesca.parking.service.ParkingService;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("parking")
@@ -67,8 +66,8 @@ public class ParkingController {
     }
 
     @PostMapping("/{id}")
-    ResponseEntity<ParkingDTO> exit(@PathVariable String id) {
-        var parking = parkingService.exit(id);
+    ResponseEntity<ParkingDTO> checkout(@PathVariable String id) {
+        var parking = parkingService.checkout(id);
         return ResponseEntity.ok(mapper.toParkingDTO(parking));
     }
 
@@ -83,7 +82,7 @@ public class ParkingController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity delete(@PathVariable String id) {
+    ResponseEntity<Object> delete(@PathVariable String id) {
          parkingService.delete(id);
         return ResponseEntity.noContent().build();
     }

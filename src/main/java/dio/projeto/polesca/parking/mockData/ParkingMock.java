@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import dio.projeto.polesca.parking.helpers.CSVLoaderHelp;
 import dio.projeto.polesca.parking.helpers.UUIDHelper;
 import dio.projeto.polesca.parking.models.Parking;
@@ -20,7 +17,6 @@ import dio.projeto.polesca.parking.models.VehicleBrand;
 import dio.projeto.polesca.parking.models.VehicleModel;
 
 public class ParkingMock {
-    private static Map<String, Parking> parkingMap = new HashMap<>();
     private static Map<Integer, VehicleBrand> brandMap = new HashMap<>();
     private static List<VehicleModel> modelMap = new ArrayList<>();
     private static List<String> colors = Arrays.asList("Red", "Grey", "Purple", "Pink", "White", "Black");

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import dio.projeto.polesca.parking.helpers.UUIDHelper;
 import dio.projeto.polesca.parking.models.Parking;
@@ -19,15 +21,18 @@ public class ParkingService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Parking> findAll() {
         return repository.findAll();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Parking findById(String id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Parking with id '" + id + "' not found!"));
     }
 
+    @Transactional
     public Parking create(Parking item) {
         if (item.getId() == null) {
             item.setId(UUIDHelper.getUUID());
@@ -39,17 +44,20 @@ public class ParkingService {
         return repository.save(item);
     }
 
+    @Transactional
     public Parking update(String id, Parking item) {
         var value = findById(id);
         value.setColor(item.getColor());
         return repository.save(value);
     }
 
+    @Transactional
     public void delete(String id) {
         repository.delete(findById(id));
     }
 
-    public Parking exit(String id) {
+    @Transactional
+    public Parking checkout(String id) {
         var parking = findById(id);
         parking.setExitDate(LocalDateTime.now());
         parking.setBill(priceService.calculate(parking.getEntryDate(), parking.getExitDate()));

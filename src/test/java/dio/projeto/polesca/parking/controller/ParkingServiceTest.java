@@ -18,7 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ParkingServiceTest {
+public class ParkingServiceTest extends AbstractContainerBase {
 
     @Autowired
     ParkingService parkingService;
