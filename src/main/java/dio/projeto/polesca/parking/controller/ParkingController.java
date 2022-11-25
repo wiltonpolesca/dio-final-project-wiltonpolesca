@@ -18,7 +18,6 @@ import dio.projeto.polesca.parking.controller.dto.ParkingCreateDTO;
 import dio.projeto.polesca.parking.controller.dto.ParkingDTO;
 import dio.projeto.polesca.parking.controller.mapper.ParkingMapper;
 import dio.projeto.polesca.parking.service.ParkingService;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("parking")

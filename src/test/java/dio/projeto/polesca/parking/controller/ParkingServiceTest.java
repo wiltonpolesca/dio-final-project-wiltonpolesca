@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
 import dio.projeto.polesca.parking.controller.dto.ParkingCreateDTO;
@@ -19,11 +18,10 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ParkingServiceTest extends AbstractContainerBase {
-
     @Autowired
     ParkingService parkingService;
 
-    @LocalServerPort
+    @org.springframework.boot.web.server.LocalServerPort
     private int randomPort;
 
     @BeforeEach
@@ -39,6 +37,8 @@ public class ParkingServiceTest extends AbstractContainerBase {
         }
 
         RestAssured.given()
+                .auth()
+                .basic(API_USER, API_PWD)
                 .when()
                 .get("/parking")
                 .then()
@@ -54,7 +54,8 @@ public class ParkingServiceTest extends AbstractContainerBase {
         parking.setState("MG");
 
         RestAssured.given()
-                .when()
+                .auth()
+                .basic(API_USER, API_PWD)
                 .contentType(ContentType.JSON)
                 .body(parking)
                 .post("/parking")
@@ -68,9 +69,11 @@ public class ParkingServiceTest extends AbstractContainerBase {
         var parking = getRandomParking();
         parking.setEntryDate(LocalDateTime.now().minusMinutes(60));
         parkingService.create(parking);
-        
+
         RestAssured.given()
-                .when()
+                .auth()
+                .basic(API_USER, API_PWD)
+                .contentType(ContentType.JSON)
                 .post("/parking/" + parking.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())

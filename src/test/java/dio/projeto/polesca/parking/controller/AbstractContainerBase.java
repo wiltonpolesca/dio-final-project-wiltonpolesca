@@ -4,9 +4,12 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 public abstract class AbstractContainerBase {
     static PostgreSQLContainer POSTGRE_SQL_CONTAINER = null;
+    protected static final String API_USER = "tester";
+    protected static final String API_PWD = "tester123";
+
     
     static {
-        POSTGRE_SQL_CONTAINER = new PostgreSQLContainer(PostgreSQLContainer.IMAGE);
+        POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(PostgreSQLContainer.IMAGE);
         POSTGRE_SQL_CONTAINER.start();
         
         System.setProperty("spring.datasource.url", POSTGRE_SQL_CONTAINER.getJdbcUrl());
