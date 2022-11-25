@@ -15,11 +15,16 @@ import dio.projeto.polesca.parking.models.Parking;
 @Service
 public class ParkingService {
     private static Map<String, Parking> parkingMap = new HashMap<>();
+    private ParkingPriceService priceService;
 
-    static {
-        for (var parking : ParkingMock.getParkins(10)) {
-            parkingMap.put(parking.getId(), parking);
-        }
+    // static {
+    //     for (var parking : ParkingMock.getParkins(10)) {
+    //         parkingMap.put(parking.getId(), parking);
+    //     }
+    // }
+    
+    public ParkingService(ParkingPriceService priceService) {
+        this.priceService = priceService;
     }
 
     public List<Parking> findAll() {
@@ -41,7 +46,9 @@ public class ParkingService {
             item.setId(UUIDHelper.getUUID());
         }
 
-        item.setEntryDate(LocalDateTime.now());
+        if (item.getEntryDate() == null) {
+            item.setEntryDate(LocalDateTime.now());
+        }
         parkingMap.put(item.getId(), item);
     }
 
@@ -54,5 +61,13 @@ public class ParkingService {
     public void delete(String id) {
         findById(id);
         parkingMap.remove(id);
+    }
+
+    public Parking exit(String id) {
+        var parking = findById(id);
+        parking.setExitDate(LocalDateTime.now());
+        parking.setBill(priceService.calculate(parking.getEntryDate(), parking.getExitDate()));
+        update(id, parking);
+        return parking;
     }
 }
