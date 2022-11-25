@@ -10,5 +10,5 @@ public class ParkingCreateDTO {
     private String model;
     private String color;
     private String state;
-    private LocalDateTime entryDate;
+    private LocalDateTime entryDate = LocalDateTime.now();
 }
